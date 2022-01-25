@@ -1,25 +1,17 @@
 import "./App.css";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "./wallet/Connector";
-import Web3 from "web3";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { Box, Input } from "@mui/material";
-import { abi } from "./contract/dc.json";
+import { Box } from "@mui/material";
 import { EthTransfer } from "./components/EthTransfer";
-import ERC20Functions from "./components/ERC20Functions";
+import { web3 } from "./contract/constants";
+import TokenTransaction from "./components/TokenTransaction";
 
 function App() {
   // web3-react hooks
-  const { active, account, library, activate, deactivate } = useWeb3React();
+  const { active, account, library, activate } = useWeb3React();
   const [balanceAmount, setbalanceAmount] = useState();
-  const [transferFrom, settransferFrom] = useState("");
-
-  let web3 = new Web3(
-    "https://ropsten.infura.io/v3/1e744c5259c740ffb4a4a94b0ac330b8"
-  );
-
-  // let dscContractAddress = "0xF6e13B49600DeF8cd5A1F90681b95Ce02Fb16821";
 
   // initialize contract
 
@@ -57,8 +49,6 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Eth Transactions</h1>
-
       <Box sx={{ marginBottom: "20px", cursor: "pointer" }}>
         {active ? (
           <Button variant="contained">Connected</Button>
@@ -68,15 +58,21 @@ function App() {
           </Button>
         )}
       </Box>
+      {active ? (
+        <div>
+          <h1>Eth Transactions</h1>
 
-      <EthTransfer
-        account={account}
-        active={active}
-        balanceAmount={balanceAmount}
-        library={library}
-      />
+          <EthTransfer
+            account={account}
+            active={active}
+            balanceAmount={balanceAmount}
+            library={library}
+          />
 
-      <ERC20Functions />
+          {/* <ERC20Functions account={account} /> */}
+          <TokenTransaction account={account} />
+        </div>
+      ) : null}
     </div>
   );
 }
